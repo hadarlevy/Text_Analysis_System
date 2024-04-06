@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Text Conversion</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+  <h1>Text Conversion Microservice</h1>
+  <form id="textConversionForm" action="/submit" method="POST">
+    <textarea id="textInput" name="text" placeholder="Enter your text here"></textarea>
+    <div>
+      <input type="radio" id="upperCase" name="mode" value="upper" checked>
+      <label for="upperCase">Upper Case</label>
+    </div>
+    <div>
+      <input type="radio" id="lowerCase" name="mode" value="lower">
+      <label for="lowerCase">Lower Case</label>
+    </div>
+    <button type="submit">Submit</button>
+  </form>
+</body>
+
+</html>

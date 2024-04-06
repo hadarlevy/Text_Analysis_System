@@ -1,0 +1,37 @@
+<!-- services.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Text Utilities Tool Manager</title>
+   <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+   <h1>Text Utilities Tool Manager</h1>
+   <div class="container">
+     <h2>Select a Service:</h2>
+     <button id="wordCountBtn">Word Count Microservice</button>
+     <button id="charCountBtn">Character Count Microservice</button>
+     <button id="reverseTextBtn">Reverse Text Microservice</button>
+     <button id="textAnalysisBtn">Text Analysis Microservice</button>
+     <button id="textConversionBtn">Text Conversion Microservice</button>
+     <button id="textChainBtn">Text Chain Microservice</button>
+   </div>
+
+   <!-- Add the content for the converted text here -->
+   <h2>Converted Text</h2>
+   <div>
+     <p id="uppercaseText"></p>
+     <p id="lowercaseText"></p>
+   </div>
+   
+   <!-- Include the JavaScript file for handling service activation -->
+   <script src="services.js" defer></script>
+</body>
+
+</html>

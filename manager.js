@@ -3,36 +3,40 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
+const textConversionService = require('./textconversion'); // Import the text conversion service module
 
-// Initialize Express app
 const app = express();
-const port = process.env.port || 3000;
+const port = process.env.PORT || 3000;
 
-// Middleware to parse JSON requests
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
 app.use(express.static(path.join(__dirname)));
 
-// Define route to serve the HTML file
+// Serve HTML file with text submission form
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'textAnalysis.html'));
-
-
-  // Update the file path
-});
-// Define route to handle form submission
-app.post('/submit', (req, res) => {
-  // Retrieve user input from request body
-  const text = req.body.text;
-  // Here you can handle the user input and interact with the microservices
-  // For demonstration, let's just log the text to the console
-  console.log('User input:', text);
-  // Send a response back to the client
-  res.send('Received your input!');
+  res.sendFile(path.join(__dirname, 'textsubmission.html'));
 });
 
-// Start the server
+// Handle form submission
+app.post('/submit', async (req, res) => {
+  try {
+    const submittedText = req.body.text; // Get submitted text
+    // Redirect to services page with submitted text as query parameter
+    res.redirect(`/services?text=${encodeURIComponent(submittedText)}`);
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+// Serve HTML file with service buttons
+app.get('/services', (req, res) => {
+  res.sendFile(path.join(__dirname, 'services.html'));
+});
+
+// Route requests to the text conversion service module
+app.use('/activate-service/text-conversion', textConversionService);
+
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
