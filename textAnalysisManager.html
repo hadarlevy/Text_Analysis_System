@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Text Utilities Tool Manager</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+  <div class="container">
+    <h1>Text Utilities Tool Manager</h1>
+    <form id="textForm">
+      <textarea id="textInput" name="text" placeholder="Enter your text here"></textarea>
+      <textarea id="resultTextArea" readonly placeholder="Result"></textarea>
+
+      <div class="containerButtons">
+        <button type="button" id="textConversionBtn">Text Conversion</button>
+        <button type="button" id="wordCountBtn">Word Count</button>
+        <button type="button" id="charCountBtn">Characters Count</button>
+        <button type="button" id="reverseTextBtn">Reverse Text </button>
+        <button type="button" id="textAnalysisBtn">Text Analysis </button>
+        <button type="button" id="textChainBtn">Text Chain </button>
+        <h4>Alternative Services</h4>
+        <button type="button" id="textConversionBtn-NodeJS">Text Conversion-NodeJS</button>
+        <button type="button" id="textChainBtn-NodeJS">Text Chain-NodeJS</button>
+      </div>
+    </form>
+  </div>
+  <script>
+    document.getElementById("textConversionBtn-NodeJS").addEventListener("click", function (event) {
+      event.preventDefault(); // Prevent default form submission
+      const text = document.getElementById("textInput").value;
+      fetch("/submit", { // Send request to admin script endpoint
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ action: "textConversion", text: text }), // Include action in the request
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Invalid Input!');
+          }
+          return response.json();
+        })
+        .then((data) => {
+          if (data.error) {
+            throw new Error(data.error);
+          }
+          const convertedText = data.result;
+          document.getElementById("resultTextArea").value = `Uppercase:\n${convertedText.uppercase}\n\nLowercase:\n${convertedText.lowercase}`;
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          document.getElementById("resultTextArea").value = error.message; // Display error message in result text box
+        });
+    });
+  </script>
+  <script>
+    document.getElementById("textChainBtn-NodeJS").addEventListener("click", function (event) {
+      event.preventDefault(); // Prevent default form submission
+
+      // Get the value of the text input
+      const text = document.getElementById("textInput").value;
+      console.log(text);
+      // Send request to the service
+      fetch("/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ action: "textChain", text: text }), // Include action and text
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Invalid Input!');
+          }
+          return response.json();
+        })
+        .then((data) => {
+          if (data.error) {
+            throw new Error(data.error);
+          }
+          document.getElementById("resultTextArea").value = data.result; // Display chained text
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          document.getElementById("resultTextArea").value = error.message; // Display error message
+        });
+    });
+  </script>
+
+</body>
+
+</html>
