@@ -13,14 +13,15 @@ app.use(express.static(path.join(__dirname)));
 app.post('/submit', async (req, res) => {
   try {
     const { action, text } = req.body;
-
+    console.log(action);
     // Define a map of actions and their corresponding microservice URLs
     const actionToURL = {
       textConversion: 'http://localhost:3001/convert',
       textChain: 'http://localhost:3002/chain', // URL for text chain service
+      wordcount: 'http://localhost:5000/count',
       // Add more actions and their corresponding URLs as needed
     };
-
+    
     // Check if the action is valid
     if (!actionToURL[action]) {
       throw new Error('Invalid action');

@@ -92,7 +92,28 @@
         });
     });
   </script>
+  <script>
+    document.getElementById("wordCountBtn").addEventListener("click", 
+    function (event) {
+      event.preventDefault(); // Prevent default form submission
 
+      // Get the value of the text input
+      const text = document.getElementById("textInput").value;
+      fetch("/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ action: "wordcount", text: text }), // Include action and text
+       
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log('WordCount:', data.word_count);
+        })
+        .catch(error => console.error('Error:', error));
+    });
+</script>
 </body>
 
 </html>
