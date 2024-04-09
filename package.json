@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "pm2 start manager.js --name manager && pm2 start textconversion.js --name service1 && pm2 start textchain.js --name service2",
+    "start": "pm2 start manager.js --name manager && pm2 start textconversion.js --name service1 && pm2 start textchain.js --name service2 && pm2 start charactercount.js --name service3 && pm2 start textreverse.js --name service4 && pm2 start textsentiment.js --name service5 && pm2 start textkeyword.js --name service6",
     "stop": "pm2 delete all",
     "test": ""
   },
@@ -13,6 +13,8 @@
   "dependencies": {
     "body-parser": "^1.20.2",
     "express": "^4.19.2",
+    "flask": "^0.2.10",
+    "natural": "^7.0.0",
     "node-fetch": "^3.3.2"
   }
 }

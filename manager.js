@@ -10,7 +10,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname)));
 
 // Route to handle form submission
-app.post('/submit', async (req, res) => {
+app.post('/servicesManager', async (req, res) => {
   try {
     const { action, text } = req.body;
     console.log(action);
@@ -18,10 +18,13 @@ app.post('/submit', async (req, res) => {
     const actionToURL = {
       textConversion: 'http://localhost:3001/convert',
       textChain: 'http://localhost:3002/chain', // URL for text chain service
-      wordcount: 'http://localhost:5000/count',
+      charCount: 'http://localhost:3004/char-count',
+      reverseText: 'http://localhost:3005/reverse',
+      textkeywords: 'http://localhost:3003/keywords',
+      analyzeSentiment: 'http://localhost:3006/analyze-sentiment'
       // Add more actions and their corresponding URLs as needed
     };
-    
+
     // Check if the action is valid
     if (!actionToURL[action]) {
       throw new Error('Invalid action');

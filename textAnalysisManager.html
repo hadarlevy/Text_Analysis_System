@@ -18,22 +18,22 @@
 
       <div class="containerButtons">
         <button type="button" id="textConversionBtn">Text Conversion</button>
-        <button type="button" id="wordCountBtn">Word Count</button>
+        <button type="button" id="textkeywordsBtn">Text keywords</button>
         <button type="button" id="charCountBtn">Characters Count</button>
         <button type="button" id="reverseTextBtn">Reverse Text </button>
-        <button type="button" id="textAnalysisBtn">Text Analysis </button>
+        <button type="button" id="analyzeSentimentBtn">Text Sentiment Analysis </button>
         <button type="button" id="textChainBtn">Text Chain </button>
         <h4>Alternative Services</h4>
-        <button type="button" id="textConversionBtn-NodeJS">Text Conversion-NodeJS</button>
-        <button type="button" id="textChainBtn-NodeJS">Text Chain-NodeJS</button>
+        <button type="button" id="textConversionBtn-Py">Text Conversion-Py</button>
+        <button type="button" id="textChainBtn-Py">Text Chain-py</button>
       </div>
     </form>
   </div>
   <script>
-    document.getElementById("textConversionBtn-NodeJS").addEventListener("click", function (event) {
+    document.getElementById("textConversionBtn").addEventListener("click", function (event) {
       event.preventDefault(); // Prevent default form submission
       const text = document.getElementById("textInput").value;
-      fetch("/submit", { // Send request to admin script endpoint
+      fetch("/servicesManager", { // Send request to admin script endpoint
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -60,14 +60,14 @@
     });
   </script>
   <script>
-    document.getElementById("textChainBtn-NodeJS").addEventListener("click", function (event) {
+    document.getElementById("textChainBtn").addEventListener("click", function (event) {
       event.preventDefault(); // Prevent default form submission
 
       // Get the value of the text input
       const text = document.getElementById("textInput").value;
       console.log(text);
       // Send request to the service
-      fetch("/submit", {
+      fetch("/servicesManager", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -93,27 +93,137 @@
     });
   </script>
   <script>
-    document.getElementById("wordCountBtn").addEventListener("click", 
-    function (event) {
+    document.getElementById("charCountBtn").addEventListener("click", function (event) {
       event.preventDefault(); // Prevent default form submission
 
       // Get the value of the text input
       const text = document.getElementById("textInput").value;
-      fetch("/submit", {
+      console.log(text);
+      // Send request to the service
+      fetch("/servicesManager", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ action: "wordcount", text: text }), // Include action and text
-       
+        body: JSON.stringify({ action: "charCount", text: text }), // Include action and text
       })
-        .then(response => response.json())
-        .then(data => {
-          console.log('WordCount:', data.word_count);
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Invalid Input!');
+          }
+          return response.json();
         })
-        .catch(error => console.error('Error:', error));
+        .then((data) => {
+          if (data.error) {
+            throw new Error(data.error);
+          }
+          document.getElementById("resultTextArea").value = data.result; // Display chained text
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          document.getElementById("resultTextArea").value = error.message; // Display error message
+        });
     });
-</script>
+  </script>
+  <script>
+    document.getElementById("reverseTextBtn").addEventListener("click", function (event) {
+      event.preventDefault(); // Prevent default form submission
+
+      // Get the value of the text input
+      const text = document.getElementById("textInput").value;
+      console.log(text);
+      // Send request to the service
+      fetch("/servicesManager", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ action: "reverseText", text: text }), // Include action and text
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Invalid Input!');
+          }
+          return response.json();
+        })
+        .then((data) => {
+          if (data.error) {
+            throw new Error(data.error);
+          }
+          document.getElementById("resultTextArea").value = data.result; // Display chained text
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          document.getElementById("resultTextArea").value = error.message; // Display error message
+        });
+    });
+  </script>
+  <script>
+    document.getElementById("textkeywordsBtn").addEventListener("click", function (event) {
+      event.preventDefault(); // Prevent default form submission
+
+      // Get the value of the text input
+      const text = document.getElementById("textInput").value;
+      console.log(text);
+      // Send request to the service
+      fetch("/servicesManager", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ action: "textkeywords", text: text }), // Include action and text
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Invalid Input!');
+          }
+          return response.json();
+        })
+        .then((data) => {
+          if (data.error) {
+            throw new Error(data.error);
+          }
+          document.getElementById("resultTextArea").value = data.result; // Display chained text
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          document.getElementById("resultTextArea").value = error.message; // Display error message
+        });
+    });
+  </script>
+  <script>
+    document.getElementById("analyzeSentimentBtn").addEventListener("click", function (event) {
+      event.preventDefault(); // Prevent default form submission
+
+      // Get the value of the text input
+      const text = document.getElementById("textInput").value;
+      console.log(text);
+      // Send request to the service
+      fetch("/servicesManager", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ action: "analyzeSentiment", text: text }), // Include action and text
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Invalid Input!');
+          }
+          return response.json();
+        })
+        .then((data) => {
+          if (data.error) {
+            throw new Error(data.error);
+          }
+          document.getElementById("resultTextArea").value = data.result; // Display chained text
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          document.getElementById("resultTextArea").value = error.message; // Display error message
+        });
+    });
+  </script>
 </body>
 
 </html>
