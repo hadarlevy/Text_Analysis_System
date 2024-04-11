@@ -224,6 +224,37 @@
         });
     });
   </script>
+
+<script>
+  document.getElementById("textConversionBtn").addEventListener("click", function (event) {
+    event.preventDefault(); // Prevent default form submission
+    const text = document.getElementById("textInput").value;
+    fetch("/servicesManager", { // Send request to admin script endpoint
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ action: "textConversion_py", text: text }), // Include action in the request
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Invalid Input!');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (data.error) {
+          throw new Error(data.error);
+        }
+        const convertedText = data.result;
+        document.getElementById("resultTextArea").value = `Uppercase:\n${convertedText.uppercase}\n\nLowercase:\n${convertedText.lowercase}`;
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        document.getElementById("resultTextArea").value = error.message; // Display error message in result text box
+      });
+  });
+</script>
 </body>
 
 </html>

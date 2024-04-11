@@ -9,11 +9,23 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname)));
 
+// Function to check if the input text contains Hebrew characters
+function containsHebrew(text) {
+  // Regular expression to match Hebrew characters
+  const hebrewPattern = /[\u0590-\u05FF]/;
+  return hebrewPattern.test(text);
+}
+
 // Route to handle form submission
 app.post('/servicesManager', async (req, res) => {
   try {
     const { action, text } = req.body;
-    console.log(action);
+
+    // Check if the input text contains Hebrew characters
+    if (containsHebrew(text)) {
+      throw new Error('Input text contains Hebrew characters. Please enter text in English.');
+    }
+
     // Define a map of actions and their corresponding microservice URLs
     const actionToURL = {
       textConversion: 'http://localhost:3001/convert',
@@ -42,7 +54,7 @@ app.post('/servicesManager', async (req, res) => {
     res.json(result);
   } catch (error) {
     console.error('Error:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: error.message });
   }
 });
 

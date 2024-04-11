@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "pm2 start manager.js --name manager && pm2 start textconversion.js --name service1 && pm2 start textchain.js --name service2 && pm2 start charactercount.js --name service3 && pm2 start textreverse.js --name service4 && pm2 start textsentiment.js --name service5 && pm2 start textkeyword.js --name service6",
+    "start": "pm2 start manager.js --name manager && pm2 start textconversion.js --name service1 && pm2 start textchain.js --name service2 && pm2 start charactercount.js --name service3 && pm2 start textreverse.js --name service4 && pm2 start textsentiment.js --name service5 && pm2 start textkeyword.js --name service6 && python3 textconversion.py",
     "stop": "pm2 delete all",
     "test": ""
   },
