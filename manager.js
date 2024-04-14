@@ -21,9 +21,14 @@ app.post('/servicesManager', async (req, res) => {
   try {
     const { action, text } = req.body;
 
-    // Check if the input text contains Hebrew characters
-    if (containsHebrew(text)) {
-      throw new Error('Input text contains Hebrew characters. Please enter text in English.');
+    // Check if the action is language detection
+    if (action === 'detectlanguage') {
+      // No need to check for Hebrew characters, allow any text for language detection
+    } else {
+      // Check if the input text contains Hebrew characters for all other actions
+      if (containsHebrew(text)) {
+        throw new Error('Input text contains Hebrew characters. Please enter text in English.');
+      }
     }
 
     // Define a map of actions and their corresponding microservice URLs
@@ -32,8 +37,8 @@ app.post('/servicesManager', async (req, res) => {
       textChain: 'http://localhost:3002/chain', // URL for text chain service
       charCount: 'http://localhost:3004/char-count',
       reverseText: 'http://localhost:3005/reverse',
-      textkeywords: 'http://localhost:3003/keywords',
-      analyzeSentiment: 'http://localhost:3006/analyze-sentiment'
+      detectlanguage: 'http://localhost:3030/detectlanguage',
+      textSummarize: 'http://localhost:3008/summarize'
       // Add more actions and their corresponding URLs as needed
     };
 
@@ -63,6 +68,6 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'textAnalysisManager.html'));
 });
 
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+app.listen(port, '0.0.0.0', () => {
+  console.log(`Server is running and listening on port ${port}`);
 });

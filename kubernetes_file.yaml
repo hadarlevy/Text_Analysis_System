@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-nodejs-manager2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-nodejs-manager2
+  template:
+    metadata:
+      labels:
+        app: my-nodejs-manager2
+    spec:
+      containers:
+      - name: my-nodejs-mainapp
+        image: hadar7/manager:manager
+        ports:
+        - containerPort: 3000
+      - name: my-nodejs-service-reverse
+        image: hadar7/manager:svc1
+        ports:
+        - containerPort: 3005
+      - name: my-nodejs-service-charactercount
+        image: hadar7/manager:svc2
+        ports:
+        - containerPort: 3004
+      - name: my-nodejs-service-textchain
+        image: hadar7/manager:svc3
+        ports:
+        - containerPort: 3002
+      - name: my-nodejs-service-detectlanguage
+        image: hadar7/manager:svc7
+        ports:
+        - containerPort: 3030
+      - name: my-nodejs-service-summarize
+        image: hadar7/manager:svc8
+        ports:
+        - containerPort: 3008
+      - name: my-nodejs-service-textconversion
+        image: hadar7/manager:svc4
+        ports:
+        - containerPort: 3001
+     
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-nodejs-manager2
+spec:
+  type: LoadBalancer
+  selector:
+    app: my-nodejs-manager2
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000

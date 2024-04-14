@@ -18,10 +18,10 @@
 
       <div class="containerButtons">
         <button type="button" id="textConversionBtn">Text Conversion</button>
-        <button type="button" id="textkeywordsBtn">Text keywords</button>
+        <button type="button" id="detectlanguageBtn">Detect Language</button>
         <button type="button" id="charCountBtn">Characters Count</button>
         <button type="button" id="reverseTextBtn">Reverse Text </button>
-        <button type="button" id="analyzeSentimentBtn">Text Sentiment Analysis </button>
+        <button type="button" id="textSummarizeBtn">Text Summarize </button>
         <button type="button" id="textChainBtn">Text Chain </button>
         <h4>Alternative Services</h4>
         <button type="button" id="textConversionBtn-Py">Text Conversion-Py</button>
@@ -159,7 +159,7 @@
     });
   </script>
   <script>
-    document.getElementById("textkeywordsBtn").addEventListener("click", function (event) {
+    document.getElementById("detectlanguageBtn").addEventListener("click", function (event) {
       event.preventDefault(); // Prevent default form submission
 
       // Get the value of the text input
@@ -171,7 +171,7 @@
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ action: "textkeywords", text: text }), // Include action and text
+        body: JSON.stringify({ action: "detectlanguage", text: text }), // Include action and text
       })
         .then((response) => {
           if (!response.ok) {
@@ -192,7 +192,7 @@
     });
   </script>
   <script>
-    document.getElementById("analyzeSentimentBtn").addEventListener("click", function (event) {
+    document.getElementById("textSummarizeBtn").addEventListener("click", function (event) {
       event.preventDefault(); // Prevent default form submission
 
       // Get the value of the text input
@@ -204,7 +204,7 @@
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ action: "analyzeSentiment", text: text }), // Include action and text
+        body: JSON.stringify({ action: "textSummarize", text: text }), // Include action and text
       })
         .then((response) => {
           if (!response.ok) {
@@ -225,36 +225,36 @@
     });
   </script>
 
-<script>
-  document.getElementById("textConversionBtn").addEventListener("click", function (event) {
-    event.preventDefault(); // Prevent default form submission
-    const text = document.getElementById("textInput").value;
-    fetch("/servicesManager", { // Send request to admin script endpoint
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ action: "textConversion_py", text: text }), // Include action in the request
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Invalid Input!');
-        }
-        return response.json();
+  <script>
+    document.getElementById("textConversionBtn").addEventListener("click", function (event) {
+      event.preventDefault(); // Prevent default form submission
+      const text = document.getElementById("textInput").value;
+      fetch("/servicesManager", { // Send request to admin script endpoint
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ action: "textConversion_py", text: text }), // Include action in the request
       })
-      .then((data) => {
-        if (data.error) {
-          throw new Error(data.error);
-        }
-        const convertedText = data.result;
-        document.getElementById("resultTextArea").value = `Uppercase:\n${convertedText.uppercase}\n\nLowercase:\n${convertedText.lowercase}`;
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-        document.getElementById("resultTextArea").value = error.message; // Display error message in result text box
-      });
-  });
-</script>
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Invalid Input!');
+          }
+          return response.json();
+        })
+        .then((data) => {
+          if (data.error) {
+            throw new Error(data.error);
+          }
+          const convertedText = data.result;
+          document.getElementById("resultTextArea").value = `Uppercase:\n${convertedText.uppercase}\n\nLowercase:\n${convertedText.lowercase}`;
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          document.getElementById("resultTextArea").value = error.message; // Display error message in result text box
+        });
+    });
+  </script>
 </body>
 
 </html>
