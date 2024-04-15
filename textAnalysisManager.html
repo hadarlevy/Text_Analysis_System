@@ -30,6 +30,7 @@
     </form>
   </div>
   <script>
+    let flag = false;
     document.getElementById("textConversionBtn").addEventListener("click", function (event) {
       event.preventDefault(); // Prevent default form submission
       const text = document.getElementById("textInput").value;
@@ -42,24 +43,32 @@
       })
         .then((response) => {
           if (!response.ok) {
-            throw new Error('Invalid Input!');
+            throw new Error(response.error.message);
           }
           return response.json();
         })
         .then((data) => {
           if (data.error) {
             throw new Error(data.error);
+
           }
           const convertedText = data.result;
           document.getElementById("resultTextArea").value = `Uppercase:\n${convertedText.uppercase}\n\nLowercase:\n${convertedText.lowercase}`;
         })
         .catch((error) => {
           console.error("Error:", error);
-          document.getElementById("resultTextArea").value = error.message; // Display error message in result text box
+          if (error == "Error: request to http://localhost:3001/convert failed, reason: connect ECONNREFUSED 127.0.0.1:3001") {
+            document.getElementById("resultTextArea").value = "This Convert Text service is not connected, Press the alternative Py service!";
+            flag = true;
+          }
+          else {
+            document.getElementById("resultTextArea").value = error; // Display error message in result text box
+          }
         });
     });
   </script>
   <script>
+    let flag2 = false;
     document.getElementById("textChainBtn").addEventListener("click", function (event) {
       event.preventDefault(); // Prevent default form submission
 
@@ -76,7 +85,7 @@
       })
         .then((response) => {
           if (!response.ok) {
-            throw new Error('Invalid Input!');
+            throw new Error(response.error.message);
           }
           return response.json();
         })
@@ -88,7 +97,13 @@
         })
         .catch((error) => {
           console.error("Error:", error);
-          document.getElementById("resultTextArea").value = error.message; // Display error message
+          if (error == "Error: request to http://localhost:3002/chain failed, reason: connect ECONNREFUSED 127.0.0.1:3002") {
+            document.getElementById("resultTextArea").value = "This Chain Text service is not connected, Press the alternative Py service!";
+            flag2 = true;
+          }
+          else {
+            document.getElementById("resultTextArea").value = error;
+          } // Display error message
         });
     });
   </script>
@@ -109,7 +124,7 @@
       })
         .then((response) => {
           if (!response.ok) {
-            throw new Error('Invalid Input!');
+            throw new Error(response.error.message);
           }
           return response.json();
         })
@@ -121,7 +136,7 @@
         })
         .catch((error) => {
           console.error("Error:", error);
-          document.getElementById("resultTextArea").value = error.message; // Display error message
+          document.getElementById("resultTextArea").value = error; // Display error message
         });
     });
   </script>
@@ -142,7 +157,7 @@
       })
         .then((response) => {
           if (!response.ok) {
-            throw new Error('Invalid Input!');
+            throw new Error(response.error.message);
           }
           return response.json();
         })
@@ -154,7 +169,7 @@
         })
         .catch((error) => {
           console.error("Error:", error);
-          document.getElementById("resultTextArea").value = error.message; // Display error message
+          document.getElementById("resultTextArea").value = error; // Display error message
         });
     });
   </script>
@@ -175,7 +190,7 @@
       })
         .then((response) => {
           if (!response.ok) {
-            throw new Error('Invalid Input!');
+            throw new Error(response.error.message);
           }
           return response.json();
         })
@@ -187,7 +202,7 @@
         })
         .catch((error) => {
           console.error("Error:", error);
-          document.getElementById("resultTextArea").value = error.message; // Display error message
+          document.getElementById("resultTextArea").value = error; // Display error message
         });
     });
   </script>
@@ -208,7 +223,7 @@
       })
         .then((response) => {
           if (!response.ok) {
-            throw new Error('Invalid Input!');
+            throw new Error(response.error.message);
           }
           return response.json();
         })
@@ -220,39 +235,83 @@
         })
         .catch((error) => {
           console.error("Error:", error);
-          document.getElementById("resultTextArea").value = error.message; // Display error message
+          document.getElementById("resultTextArea").value = error; // Display error message
         });
     });
   </script>
-
   <script>
-    document.getElementById("textConversionBtn").addEventListener("click", function (event) {
+    document.getElementById("textConversionBtn-Py").addEventListener("click", function (event) {
       event.preventDefault(); // Prevent default form submission
-      const text = document.getElementById("textInput").value;
-      fetch("/servicesManager", { // Send request to admin script endpoint
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ action: "textConversion_py", text: text }), // Include action in the request
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error('Invalid Input!');
-          }
-          return response.json();
+      if (flag == false) {
+        document.getElementById("resultTextArea").value = "This service cannot response cause JS Convert Text service is running"; // Display chained text
+
+      }
+      else {
+        // Get the value of the text input
+        const text = document.getElementById("textInput").value;
+        console.log(text);
+        // Send request to the service
+        fetch("/servicesManager", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ action: "textConversionPy", text: text }), // Include action and text
         })
-        .then((data) => {
-          if (data.error) {
-            throw new Error(data.error);
-          }
-          const convertedText = data.result;
-          document.getElementById("resultTextArea").value = `Uppercase:\n${convertedText.uppercase}\n\nLowercase:\n${convertedText.lowercase}`;
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(response.error.message);
+            }
+            return response.json();
+          })
+          .then((data) => {
+            if (data.error) {
+              throw new Error(data.error);
+            }
+            document.getElementById("resultTextArea").value = data.result; // Display chained text
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            document.getElementById("resultTextArea").value = error; // Display error message
+          });
+      };
+    });
+  </script>
+  <script>
+    document.getElementById("textChainBtn-Py").addEventListener("click", function (event) {
+      event.preventDefault(); // Prevent default form submission
+      if (flag2 == false) {
+        document.getElementById("resultTextArea").value = "This service cannot response cause JS Chain Text service is running"; // Display chained text
+
+      }
+      else {
+        const text = document.getElementById("textInput").value;
+        console.log(text);
+        // Send request to the service
+        fetch("/servicesManager", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ action: "chainPY", text: text }), // Include action and text
         })
-        .catch((error) => {
-          console.error("Error:", error);
-          document.getElementById("resultTextArea").value = error.message; // Display error message in result text box
-        });
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(response.error.message);
+            }
+            return response.json();
+          })
+          .then((data) => {
+            if (data.error) {
+              throw new Error(data.error);
+            }
+            document.getElementById("resultTextArea").value = data.result; // Display chained text
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            document.getElementById("resultTextArea").value = error; // Display error message
+          });
+      };
     });
   </script>
 </body>

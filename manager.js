@@ -38,7 +38,10 @@ app.post('/servicesManager', async (req, res) => {
       charCount: 'http://localhost:3004/char-count',
       reverseText: 'http://localhost:3005/reverse',
       detectlanguage: 'http://localhost:3030/detectlanguage',
-      textSummarize: 'http://localhost:3008/summarize'
+      textSummarize: 'http://localhost:3008/summarize',
+      textConversionPy: 'http://0.0.0.0:5000/convertPY',
+      chainPY: 'http://0.0.0.0:5001/chainPY',
+
       // Add more actions and their corresponding URLs as needed
     };
 
@@ -59,7 +62,10 @@ app.post('/servicesManager', async (req, res) => {
     res.json(result);
   } catch (error) {
     console.error('Error:', error);
-    res.status(500).json({ error: error.message });
+    //res.status(500).json({ statusServer: error.message });
+    res.json({ error: error.message });
+    console.log(error);
+
   }
 });
 

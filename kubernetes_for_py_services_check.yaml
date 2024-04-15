@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: my-manager-js-services
+  name: my-manager-check
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: my-manager-js-services
+      app: my-manager-check
   template:
     metadata:
       labels:
-        app: my-manager-js-services
+        app: my-manager-check
     spec:
       containers:
       - name: my-nodejs-mainapp
@@ -25,10 +25,6 @@ spec:
         image: hadar7/manager:svc2
         ports:
         - containerPort: 3004
-      - name: my-nodejs-service-textchain
-        image: hadar7/manager:svc3
-        ports:
-        - containerPort: 3002
       - name: my-nodejs-service-detectlanguage
         image: hadar7/manager:svc7
         ports:
@@ -37,10 +33,6 @@ spec:
         image: hadar7/manager:svc8
         ports:
         - containerPort: 3008
-      - name: my-nodejs-service-textconversion
-        image: hadar7/manager:svc4
-        ports:
-        - containerPort: 3001
       - name: my-python-service-textconversion
         image: hadar7/manager:alternativeSvc1
         ports:
@@ -55,11 +47,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: my-manager-js-services
+  name: my-manager-check
 spec:
   type: LoadBalancer
   selector:
-    app: my-manager-js-services
+    app: my-manager-check
   ports:
     - protocol: TCP
       port: 80
